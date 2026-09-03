@@ -2,8 +2,11 @@ import React from 'react'
 
 const App = () => {
   return (
-    <div>App</div>
-  )
+    <div className="container text-center mt-5">
+      <h1 className="text-primary">Hello Bootstrap + Vite!</h1>
+      <button className="btn btn-success">Click Me</button>
+    </div>
+  );
 }
 
 export default App
