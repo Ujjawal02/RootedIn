@@ -1,0 +1,28 @@
+:root {
+  --bs-primary: #1B4332;
+  --bs-primary-rgb: 27, 67, 50;
+  --bs-secondary: #D4A373;
+  --bs-secondary-rgb: 212, 163, 115;
+  --bs-success: #40916C;
+  --bs-success-rgb: 64, 145, 108;
+  --bs-warning: #E07A5F;
+  --bs-warning-rgb: 224, 122, 95;
+  --bs-danger: #BC4B3C;
+  --bs-danger-rgb: 188, 75, 60;
+  --bs-body-bg: #FAF7F2;
+  --bs-body-color: #22333B;
+  --bs-border-color: #E5E1D8;
+  --bs-link-color: #1B4332;
+  --bs-link-hover-color: #40916C;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+.btn-primary:hover {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+}
+.text-success { color: var(--bs-primary) !important; }
+.bg-success { background-color: var(--bs-primary) !important; }
