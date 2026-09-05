@@ -14,6 +14,9 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+app.use('/auth', require('./routes/auth.routes'));
+
+
 app.get("/health", (req, res) => {
     res.status(200).json({ success: true, message: "RootedIn API is running" });
 });
