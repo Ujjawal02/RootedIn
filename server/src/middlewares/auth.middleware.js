@@ -36,3 +36,10 @@ module.exports.isFarmer = (req, res, next) => {
     }
     next();
 };
+
+module.exports.isUser = (req, res, next) => {
+    if (req.user?.role !== "user") {
+        return res.status(403).json({ success: false, message: "This action is only available to users" });
+    }
+    next();
+};
