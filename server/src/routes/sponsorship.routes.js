@@ -6,11 +6,13 @@ const { confirmSponsorshipSchema } = require("../validations/sponsorship.validat
 const validate = require("../middlewares/validate.middleware");
 const { userVerification, isUser } = require("../middlewares/auth.middleware");
 
-router.use(userVerification, isUser);
+router.use(userVerification); // everyone below must simply be logged in
 
-router.get("/checkout/direct/:treeId", sponsorshipController.directCheckout);
-router.get("/checkout/cart/:cartId", sponsorshipController.cartItemCheckout);
-router.get("/checkout/cart", sponsorshipController.cartCheckout);
-router.post("/confirm", validate(confirmSponsorshipSchema), sponsorshipController.confirmSponsorship);
+router.get("/checkout/direct/:treeId", isUser, sponsorshipController.directCheckout);
+router.get("/checkout/cart/:cartId", isUser, sponsorshipController.cartItemCheckout);
+router.get("/checkout/cart", isUser, sponsorshipController.cartCheckout);
+router.post("/confirm", isUser, validate(confirmSponsorshipSchema), sponsorshipController.confirmSponsorship);
+
+router.get("/:sponsorshipId/updates", sponsorshipController.getGrowthUpdates); // sponsor OR farmer — checked inside the controller, not via role middleware
 
 module.exports = router;

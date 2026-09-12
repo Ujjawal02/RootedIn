@@ -143,3 +143,31 @@ module.exports.confirmSponsorship = async (req, res) => {
         return res.status(500).json({ success: false, message: "Internal Server error" });
     }
 };
+
+
+// add to the top of sponsorship.controller.js
+const GrowthUpdate = require("../models/growthUpdate.model");
+
+// add this new export
+module.exports.getGrowthUpdates = async (req, res) => {
+    try {
+        const { sponsorshipId } = req.params;
+
+        // accessible to EITHER the sponsor who owns this, OR the farmer assigned to it
+        const sponsorship = await Sponsorship.findOne({
+            _id: sponsorshipId,
+            $or: [{ sponsorId: req.user._id }, { farmerId: req.user._id }],
+        });
+
+        if (!sponsorship) {
+            return res.status(404).json({ success: false, message: "Sponsorship not found" });
+        }
+
+        const updates = await GrowthUpdate.find({ sponsorshipId }).sort({ createdAt: -1 });
+
+        return res.status(200).json({ success: true, updates });
+    } catch (error) {
+        console.log("Get Growth Updates Error:", error);
+        return res.status(500).json({ success: false, message: "Internal Server error" });
+    }
+};
