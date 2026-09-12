@@ -6,4 +6,10 @@ const confirmSponsorshipSchema = Joi.object({
     cartId: Joi.string().when("type", { is: "cart-item", then: Joi.required() }),
 });
 
-module.exports = { confirmSponsorshipSchema };
+
+const assignFarmerSchema = Joi.object({
+    sponsorshipId: Joi.string().required(),
+    farmerId: Joi.string().required(),
+});
+
+module.exports = { confirmSponsorshipSchema, assignFarmerSchema };

@@ -18,7 +18,7 @@ app.use('/auth', require('./routes/auth.routes'));
 app.use('/trees', require('./routes/tree.routes'));
 app.use('/cart', require('./routes/cart.routes'));
 app.use('/sponsorship', require('./routes/sponsorship.routes'));
-
+app.use('/admin', require('./routes/admin.routes'));
 
 app.get("/health", (req, res) => {
     res.status(200).json({ success: true, message: "RootedIn API is running" });
