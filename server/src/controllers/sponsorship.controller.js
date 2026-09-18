@@ -1,6 +1,7 @@
 const Tree = require("../models/tree.model");
 const Cart = require("../models/cart.model");
 const Sponsorship = require("../models/sponsorship.model");
+const GrowthUpdate = require("../models/growthUpdate.model");
 
 module.exports.directCheckout = async (req, res) => {
     try {
@@ -144,9 +145,6 @@ module.exports.confirmSponsorship = async (req, res) => {
     }
 };
 
-
-// add to the top of sponsorship.controller.js
-const GrowthUpdate = require("../models/growthUpdate.model");
 
 // add this new export
 module.exports.getGrowthUpdates = async (req, res) => {
