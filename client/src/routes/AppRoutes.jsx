@@ -2,10 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import ProtectedRoute from '../components/common/ProtectedRoute'
-
-import UserLayout from '../layouts/UserLayout'
-import AdminLayout from '../layouts/AdminLayout'
-import FarmerLayout from '../layouts/FarmerLayout'
+import MainLayout from '../layouts/MainLayout'
 
 import Login from '../pages/auth/Login'
 import Signup from '../pages/auth/Signup'
@@ -27,34 +24,36 @@ import FarmerAssignedTrees from '../pages/farmer/FarmerAssignedTrees'
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public */}
-      <Route path='/' element={<Home />} />
-      <Route path='/trees/:id' element={<ShowTree />} />
-      <Route path='/signup' element={<Signup />} />
-      <Route path='/login' element={<Login />} />
+      <Route element={<MainLayout />}>
+        {/* Public — Navbar/Footer show, no login required */}
+        <Route path='/' element={<Home />} />
+        <Route path='/trees/:id' element={<ShowTree />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
 
-      {/* User-only */}
-      <Route element={<ProtectedRoute allowedRoles={['user']}><UserLayout /></ProtectedRoute>}>
-        <Route path='/cart' element={<CartItem />} />
-        <Route path='/sponsor' element={<Sponsor />} />
-        <Route path='/myTree' element={<MyTree />} />
+        {/* User-only */}
+        <Route element={<ProtectedRoute allowedRoles={['user']} />}>
+          <Route path='/cart' element={<CartItem />} />
+          <Route path='/sponsor' element={<Sponsor />} />
+          <Route path='/myTree' element={<MyTree />} />
+        </Route>
+
+        {/* Admin-only */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path='/newTree' element={<NewTree />} />
+          <Route path='/trees/update/:id' element={<UpdateTree />} />
+          <Route path='/deleted' element={<DeletedTrees />} />
+          <Route path='/pending' element={<PendingReq />} />
+          <Route path='/assigned' element={<AssignedSponsorships />} />
+        </Route>
+
+        {/* Farmer-only */}
+        <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
+          <Route path='/farmer/assigned' element={<FarmerAssignedTrees />} />
+        </Route>
+
+        <Route path='*' element={<h1>404 Page Not Found</h1>} />
       </Route>
-
-      {/* Admin-only */}
-      <Route element={<ProtectedRoute allowedRoles={['admin']}><AdminLayout /></ProtectedRoute>}>
-        <Route path='/newTree' element={<NewTree />} />
-        <Route path='/trees/update/:id' element={<UpdateTree />} />
-        <Route path='/deleted' element={<DeletedTrees />} />
-        <Route path='/pending' element={<PendingReq />} />
-        <Route path='/assigned' element={<AssignedSponsorships />} />
-      </Route>
-
-      {/* Farmer-only */}
-      <Route element={<ProtectedRoute allowedRoles={['farmer']}><FarmerLayout /></ProtectedRoute>}>
-        <Route path='/farmer/assigned' element={<FarmerAssignedTrees />} />
-      </Route>
-
-      <Route path='*' element={<h1>404 Page Not Found</h1>} />
     </Routes>
   )
 }
