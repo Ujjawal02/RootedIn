@@ -12,6 +12,7 @@ const Home = () => {
   if (isLoading) {
     return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
   }
+
   if (isError) return <p className="text-center text-danger py-5">Failed to load trees.</p>;
   if (!trees || trees.length === 0) return <p className="text-center text-muted py-5">No trees available right now.</p>;
 

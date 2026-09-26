@@ -6,7 +6,7 @@ export const treeApi = apiSlice.injectEndpoints({
             query: () => '/trees',
             transformResponse: (response) => response.trees,
             providesTags: (result) => 
-                result ? [...result.map(({id}) => ({type:'Tree', id: _id})), {type:'Tree', id: 'LIST'}]
+                result ? [...result.map(({_id}) => ({type:'Tree', id: _id})), {type:'Tree', id: 'LIST'}]
                     : [{type: 'Tree', id: 'LIST'}],
         }),
 
@@ -26,7 +26,7 @@ export const treeApi = apiSlice.injectEndpoints({
         }),
 
         updateTree: builder.mutation({
-            query: (body) => ({
+            query: ({id, ...body}) => ({
                 url: `/trees/${id}`,
                 method: 'PUT',
                 body
@@ -35,11 +35,11 @@ export const treeApi = apiSlice.injectEndpoints({
         }),
 
         deleteTree: builder.mutation({
-            query: () => ({
+            query: (id) => ({
                 url: `/trees/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: [{type: 'Tree', id: 'List'}],
+            invalidatesTags: [{type: 'Tree', id: 'LIST'}],
         })
     })
 })
