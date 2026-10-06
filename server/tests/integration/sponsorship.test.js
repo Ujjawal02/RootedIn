@@ -104,3 +104,18 @@ describe("Sponsorship - cart-all flow", () => {
         expect(res.statusCode).toBe(400);
     });
 });
+
+describe("Sponsorship - get my sponsorships", () => {
+    it("should only return the logged-in sponsor's own sponsorships, not anyone else's", async () => {
+        const { cookie: cookieA, user: sponsorA } = await createAndLoginAs("user", "A");
+        const { user: sponsorB } = await createAndLoginAs("user", "B");
+        const tree = await createTree();
+
+        await Sponsorship.create({ treeId: tree._id, sponsorId: sponsorA._id, amount: 300 });
+        await Sponsorship.create({ treeId: tree._id, sponsorId: sponsorB._id, amount: 300 });
+
+        const res = await request(app).get("/sponsorship/mine").set("Cookie", cookieA);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.sponsorships.length).toBe(1);
+    });
+});
