@@ -15,4 +15,6 @@ router.post("/confirm", isUser, validate(confirmSponsorshipSchema), sponsorshipC
 
 router.get("/:sponsorshipId/updates", sponsorshipController.getGrowthUpdates); // sponsor OR farmer — checked inside the controller, not via role middleware
 
+router.get("/mine", isUser, sponsorshipController.getMySponsorships);
+
 module.exports = router;

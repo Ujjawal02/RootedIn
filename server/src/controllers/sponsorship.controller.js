@@ -169,3 +169,17 @@ module.exports.getGrowthUpdates = async (req, res) => {
         return res.status(500).json({ success: false, message: "Internal Server error" });
     }
 };
+
+module.exports.getMySponsorships = async (req, res) => {
+    try {
+        const sponsorships = await Sponsorship.find({ sponsorId: req.user._id })
+            .populate("treeId")
+            .populate({ path: "farmerId", select: "name email" })
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({ success: true, sponsorships });
+    } catch (error) {
+        console.log("Get My Sponsorships Error:", error);
+        return res.status(500).json({ success: false, message: "Internal Server error" });
+    }
+};
