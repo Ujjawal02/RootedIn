@@ -2,7 +2,7 @@ import React from 'react'
 
 const GrowthTimeline = ({ updates }) => {
   if (!updates || updates.length === 0) {
-    return <p className="text-muted small mb-0">No updates posted yet.</p>;
+    return <p className="text-muted small mb-0">No updates posted yet....</p>;
   }
 
   return (

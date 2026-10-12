@@ -24,7 +24,7 @@ export const sponsorshipApi = apiSlice.injectEndpoints({
         }),
 
         getGrowthUpdates: builder.query({
-            query: (sponsorshipId) => `/sponsorship/${sponsorshipId}/updated`,
+            query: (sponsorshipId) => `/sponsorship/${sponsorshipId}/updates`,
             transformResponse: (response) => response.updates,
             providesTags: (result, erro, sponsorshipId) => 
             [{ type: 'Sponsorship', id: sponsorshipId }],
