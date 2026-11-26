@@ -1,5 +1,5 @@
 const ApiError = require('../utils/ApiError');
-
+const multer = require("multer");
 
 const errorHandler = (err, req, res, next) =>{
     if(err instanceof ApiError){
@@ -8,6 +8,11 @@ const errorHandler = (err, req, res, next) =>{
             message: err.message,
             errors: err.errors,
         });
+    }
+
+    if (err instanceof multer.MulterError) {
+        const message = err.code === "LIMIT_FILE_SIZE" ? "Image must be 5 MB or smaller" : err.message;
+        return res.status(400).json({ success: false, message });
     }
 
     console.log("Unhandled Error:", err);

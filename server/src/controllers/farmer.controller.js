@@ -1,5 +1,6 @@
 const Sponsorship = require("../models/sponsorship.model");
 const GrowthUpdate = require("../models/growthUpdate.model");
+const { uploadImage, deleteImage } = require("../services/upload.service");
 
 module.exports.getAssignedTrees = async (req, res) => {
     try {
@@ -37,9 +38,14 @@ module.exports.markCompleted = async (req, res) => {
 };
 
 module.exports.postGrowthUpdate = async (req, res) => {
+    let uploaded = null;
     try {
         const { sponsorshipId } = req.params;
-        const { imageUrl, note } = req.body;
+        const { note } = req.body;
+
+        if(!req.file){
+            return res.status(400).json({ success: false, message: "A photo is required" });
+        }
 
         // Deliberately NOT filtering by status: "assigned" here — a farmer should still be able to
         // log one final update on a tree they just marked completed, without losing access to it.
@@ -47,17 +53,19 @@ module.exports.postGrowthUpdate = async (req, res) => {
         if (!sponsorship) {
             return res.status(404).json({ success: false, message: "Sponsored tree not found or not assigned to you" });
         }
+        uploaded = await uploadImage(req.file.buffer, "growth-updates")
 
         const update = await GrowthUpdate.create({
             sponsorshipId,
             farmerId: req.user._id,
-            image: { url: imageUrl },
+            image: uploaded,
             note,
         });
 
         return res.status(201).json({ success: true, message: "Update posted", update });
     } catch (error) {
         console.log("Post Growth Update Error:", error);
-        return res.status(500).json({ success: false, message: "Internal Server error" });
+        console.log("Cloudinary Error Details:", error.http_code, error.message);
+        return res.status(500).json({ success: false, message: "Internal Server error..." });
     }
 };

@@ -12,7 +12,10 @@ const growthUpdateSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    image: { url: { type: String, required: true } },
+    image: { 
+      url: { type: String, required: true },
+      public_id: {type: String, default: null}
+   },
     note: { type: String, required: true, trim: true },
   },
   { timestamps: true },
