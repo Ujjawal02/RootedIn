@@ -5,7 +5,7 @@ import {useGetTreeByIdQuery, useDeleteTreeMutation} from '../../features/tree/tr
 import {selectCurrentUser} from '../../features/auth/authSlice'
 import CartButton from '../../components/cart/CartButton'
 import SponsorButton from '../../components/tree/SponsorButton'
-
+import toast from 'react-hot-toast';
 const ShowTree = () => {
   const {id} = useParams();
   const naviagate = useNavigate();
@@ -19,9 +19,10 @@ const ShowTree = () => {
     }
     try {
       await deleteTree(id).unwrap();
+      toast.success("Tree deleted. You can restore it from Deleted Trees.");
       Navigate('/');
     } catch (error) {
-      alert("Something went wrong deleting this tree.");
+      toast.error("Something went wrong deleting this tree.");
     }
   }
 

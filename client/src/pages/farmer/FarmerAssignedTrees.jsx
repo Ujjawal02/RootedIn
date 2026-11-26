@@ -5,7 +5,7 @@ import {
 import { useGetGrowthUpdatesQuery } from '../../features/sponsorship/sponsorshipApi'
 import GrowthTimeline from '../../components/tree/GrowthTimeline'
 import ImagePicker from '../../components/common/ImagePicker'
-
+import toast from 'react-hot-toast'
 const GrowthUpdateForm = ({ sponsorshipId, onDone }) => {
   const [note, setNote] = useState("");
   const [imageFile, setImageFile] = useState(null);
@@ -59,11 +59,12 @@ const FarmerTreeCard = ({ item }) => {
   const [markCompleted, { isLoading: isCompleting }] = useMarkCompletedMutation();
 
   const handleComplete = async () => {
-    if (!window.confirm("Mark this tree as completed?")) return;
+    // if (!window.confirm("Mark this tree as completed?")) return;
     try {
       await markCompleted(item._id).unwrap();
+      toast.success("Marked as completed.");
     } catch (err) {
-      alert("Failed to update status.");
+      toast.error("Failed to update status.");
     }
   };
 

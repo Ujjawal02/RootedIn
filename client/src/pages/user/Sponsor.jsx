@@ -5,6 +5,7 @@ import {
   useConfirmSponsorshipMutation,
 } from '../../features/sponsorship/sponsorshipApi'
 
+import toast from 'react-hot-toast';
 const Sponsor = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -45,11 +46,11 @@ const Sponsor = () => {
           };
         }
       await confirmSponsorship(body).unwrap();
-      alert("🎉 Congratulations! Your sponsorship request has been submitted successfully. Our admin will review it and assign a farmer soon.");
+      toast.success("Sponsorship request submitted. Our team will review it and assign a farmer soon.");
       navigate('/myTree');
     } catch (error) {
       console.log("CONFIRM ERROR:", error);
-      alert(error?.data?.message || "Something went wrong confirming your sponsorship. Please try again.");
+      toast.error(error?.data?.message || "Could not confirm your sponsorship. Please try again.");
     }
   };
 

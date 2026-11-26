@@ -7,12 +7,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/theme.css';
 import App from './App.jsx';
 import ErrorBoundary from './components/common/ErrorBoundary.jsx';
+import { Toaster } from 'react-hot-toast';
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <BrowserRouter>
       <ErrorBoundary>
         <App />
+        <Toaster
+          position="top-right"
+          toastOptions={{ success: { iconTheme: { primary: '#1B4332', secondary: '#fff' } } }}
+        />
       </ErrorBoundary>
     </BrowserRouter>
   </Provider>

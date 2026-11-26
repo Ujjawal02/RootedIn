@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
   useGetApprovedUnassignedQuery, useGetFarmersQuery, useAssignFarmerMutation,
 } from '../../features/admin/adminApi'
-
+import toast from 'react-hot-toast';
 const AssignedSponsorships = () => {
   const { data: requests, isLoading, isError } = useGetApprovedUnassignedQuery();
   const { data: farmers } = useGetFarmersQuery();
@@ -14,13 +14,14 @@ const AssignedSponsorships = () => {
   const handleAssign = async (sponsorshipId) => {
     const farmerId = selectedFarmer[sponsorshipId];
     if (!farmerId) {
-      alert("Please select a farmer first.");
+      toast.error("Please select a farmer first.");
       return;
     }
     try {
       await assignFarmer({ sponsorshipId, farmerId }).unwrap();
+      toast.success("Farmer assigned.");
     } catch (error) {
-      alert("Failed to assign farmer.");
+      toast.error("Failed to assign farmer.");
     }
   };
 
