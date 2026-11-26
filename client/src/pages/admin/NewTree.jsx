@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCreateTreeMutation } from '../../features/tree/treeApi'
+import ImagePicker from '../../components/common/ImagePicker'
 
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
 const NewTree = () => {
   const [formData, setFormData] = useState({
-    name: "", species: "", price: "", category: "", description: "", imageUrl: "",
+    name: "", species: "", price: "", category: "", description: "",
   });
   const navigate = useNavigate();
+  const [imageFile, setImageFile] = useState(null);
+  const [formError, setFormError] = useState("");
   const [createTree, { isLoading, error }] = useCreateTreeMutation();
 
   const handleChange = (e) => {
@@ -17,14 +20,28 @@ const NewTree = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError("");
+    if(!imageFile){
+      setFormError("Please choose a tree image.");
+      return;
+    }
+
+    const body = new FormData();
+    Object.entries(formData).forEach(
+      ([key, value]) => body.append(key, value)
+    );
+    body.append("image", imageFile);
+
     try {
-      await createTree(formData).unwrap();
+      await createTree(body).unwrap();
       navigate('/');
     } catch (err) {
+      console.log(err)
       // error object from the hook covers the UI message below
     }
   };
 
+  const errorMessage = formError || error?.data.errors?.[0] | error?.data?.message;
   return (
     <div className="container mt-4 mb-5">
       <div className="row justify-content-center">
@@ -32,9 +49,9 @@ const NewTree = () => {
           <div className="card shadow-sm p-4">
             <h2 className="mb-4">Add New Tree</h2>
 
-            {error && (
+            {errorMessage && (
               <div className="alert alert-danger py-2">
-                {error.data?.message || "Failed to create tree."}
+                {errorMessage}
               </div>
             )}
 
@@ -73,15 +90,7 @@ const NewTree = () => {
                   value={formData.description} onChange={handleChange} required />
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="imageUrl" className="form-label">Image URL</label>
-                <input type="url" name="imageUrl" id="imageUrl" className="form-control"
-                  placeholder="https://..." value={formData.imageUrl} onChange={handleChange} required />
-                {formData.imageUrl && (
-                  <img src={formData.imageUrl} alt="Preview" className="img-thumbnail mt-2"
-                    style={{ maxHeight: "180px" }} onError={(e) => { e.target.style.display = "none"; }} />
-                )}
-              </div>
+              <ImagePicker label="Tree image" required onChange={setImageFile}/>
 
               <button className="btn btn-success w-100" disabled={isLoading}>
                 {isLoading ? "Creating..." : "Add Tree"}

@@ -18,7 +18,7 @@ export const farmerApi = apiSlice.injectEndpoints({
       ],
     }),
     postGrowthUpdate: builder.mutation({
-      query: ({ sponsorshipId, ...body }) => ({ url: `/farmer/updates/${sponsorshipId}`, method: 'POST', body }),
+      query: ({ sponsorshipId, formData }) => ({ url: `/farmer/updates/${sponsorshipId}`, method: 'POST', body: formData }),
       invalidatesTags: (result, error, { sponsorshipId }) => [{ type: 'Sponsorship', id: sponsorshipId }],
     }),
   }),

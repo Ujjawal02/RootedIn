@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import {useGetTreeByIdQuery, useUpdateTreeMutation} from '../../features/tree/treeApi'
+import ImagePicker from '../../components/common/ImagePicker';
 
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
@@ -14,8 +15,10 @@ const UpdateTree = () => {
   const [UpdateTree, {isLoading: isSaving, error}] = useUpdateTreeMutation();
 
   const [formData, setFormData] = useState({
-    name: "", species: "", price: "", category: "", description: "", imageUrl: "",
+    name: "", species: "", price: "", category: "", description: "",
   });
+
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
     if(tree){
@@ -25,7 +28,6 @@ const UpdateTree = () => {
         price: tree.price ?? "",
         category: tree.category || "",
         description: tree.description || "",
-        imageUrl: tree.image?.url || "",
       });
     }
   }, [tree]);
@@ -40,6 +42,17 @@ const UpdateTree = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const body = new FormData();
+
+    Object.entries(formData).forEach(
+      ([key, value])=> body.append(key, value)
+    );
+
+    if(imageFile){
+      body.append("image", imageFile)
+    }
+
     try {
       await UpdateTree({id, ...formData}).unwrap();
     } catch (error) {
@@ -59,16 +72,18 @@ const UpdateTree = () => {
     return <p className="text-center text-muted py-5">Tree not found.</p>;
   }
 
+  const errorMessage = error?.data?.errors?.[0] || error?.data?.message;
 
   return (
     <div className='row justify-content-center'>
       <div className='col-md-7'>
           <div className='card shadow-sm p-4'>
                 <h2 className='mb-4'>Update Tree</h2>
+
                 {
-                  error && 
-                  <div>
-                    {error.data?.message || "Failed to update tree."}
+                  errorMessage && 
+                  <div className='alert alert-danger py-2'>
+                    {errorMessage}
                   </div>
                 }
 
@@ -113,15 +128,8 @@ const UpdateTree = () => {
                         value={formData.description} onChange={handleChange} required />
                     </div>
 
-                    <div className="mb-3">
-                      <label htmlFor="imageUrl" className="form-label">Image URL</label>
-                      <input type="url" name="imageUrl" id="imageUrl" className="form-control"
-                        value={formData.imageUrl} onChange={handleChange} required />
-                      {formData.imageUrl && (
-                        <img src={formData.imageUrl} alt="Preview" className="img-thumbnail mt-2"
-                          style={{ maxHeight: "180px" }} onError={(e) => { e.target.style.display = "none"; }} />
-                      )}
-                    </div>
+                    <ImagePicker label='Tree image (leave empty to keep the current one)'
+                    existingUrl={tree.image?.url} onChange={setImageFile}/>
                       
                      <div className="d-flex gap-2">
                         <button type="submit" className="btn btn-success flex-grow-1" disabled={isSaving}>

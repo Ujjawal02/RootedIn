@@ -6,11 +6,14 @@ import { store } from './app/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/theme.css';
 import App from './App.jsx';
+import ErrorBoundary from './components/common/ErrorBoundary.jsx';
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </BrowserRouter>
   </Provider>
 );

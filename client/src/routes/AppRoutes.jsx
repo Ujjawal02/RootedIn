@@ -20,6 +20,11 @@ import PendingReq from '../pages/admin/PendingReq'
 import AssignedSponsorships from '../pages/admin/AssignedSponsorships'
 
 import FarmerAssignedTrees from '../pages/farmer/FarmerAssignedTrees'
+import About from '../pages/public/About'
+import NotFound from '../pages/public/NotFound'
+
+// with the other public routes
+
 
 const AppRoutes = () => {
   return (
@@ -30,7 +35,7 @@ const AppRoutes = () => {
         <Route path='/trees/:id' element={<ShowTree />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-
+        <Route path='/about' element={<About />} />
         {/* User-only */}
         <Route element={<ProtectedRoute allowedRoles={['user']} />}>
           <Route path='/cart' element={<CartItem />} />
@@ -51,8 +56,7 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
           <Route path='/farmer/assigned' element={<FarmerAssignedTrees />} />
         </Route>
-
-        <Route path='*' element={<h1>404 Page Not Found</h1>} />
+        <Route path='*' element={<NotFound />} />
       </Route>
     </Routes>
   )

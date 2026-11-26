@@ -17,19 +17,19 @@ export const treeApi = apiSlice.injectEndpoints({
         }),
 
         createTree: builder.mutation({
-            query: (body) => ({
+            query: (formData) => ({
                 url: '/trees',
                 method: 'POST',
-                body
+                body: formData
             }),
             invalidatesTags: [{type: 'Tree', id: 'LIST'}],
         }),
 
         updateTree: builder.mutation({
-            query: ({id, ...body}) => ({
+            query: ({id, formData}) => ({
                 url: `/trees/${id}`,
                 method: 'PUT',
-                body
+                body: formData
             }),
             invalidatesTags: (result, error, {id}) => [{type: 'Tree', id}, {type: 'Tree', id: 'LIST'}],
         }),

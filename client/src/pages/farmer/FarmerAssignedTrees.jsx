@@ -4,40 +4,66 @@ import {
 } from '../../features/farmer/farmerApi'
 import { useGetGrowthUpdatesQuery } from '../../features/sponsorship/sponsorshipApi'
 import GrowthTimeline from '../../components/tree/GrowthTimeline'
+import ImagePicker from '../../components/common/ImagePicker'
 
-// Same per-item sub-component pattern as MyTreeCard — each card needs its own
-// expand/collapse state, its own form state, and its own independent hook calls.
+const GrowthUpdateForm = ({ sponsorshipId, onDone }) => {
+  const [note, setNote] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [formError, setFormError] = useState("");
+  const [postGrowthUpdate, { isLoading }] = usePostGrowthUpdateMutation();
+
+  const handleSubmit = async () => {
+    setFormError("");
+
+    if (!imageFile || note.trim().length < 5) {
+      setFormError("Add a photo and a note of at least 5 characters.");
+      return;
+    }
+
+    const body = new FormData();
+    body.append("image", imageFile);
+    body.append("note", note.trim());
+
+    try {
+      await postGrowthUpdate({ sponsorshipId, formData: body }).unwrap();
+      onDone();
+    } catch (err) {
+      console.log("sml", err)
+      setFormError(err?.data?.errors?.[0] || err?.data?.message || "Failed to post update.");
+    }
+  };
+
+  return (
+    <div className="border rounded p-2 mb-2">
+      <ImagePicker label="Photo" onChange={setImageFile} />
+      <textarea
+        placeholder="How's the tree doing?"
+        className="form-control form-control-sm mb-2"
+        rows="2"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+      />
+      {formError && <div className="text-danger small mb-2">{formError}</div>}
+      <button onClick={handleSubmit} className="btn btn-success btn-sm w-100" disabled={isLoading}>
+        {isLoading ? "Posting..." : "Submit Update"}
+      </button>
+    </div>
+  );
+};
+
 const FarmerTreeCard = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  const [formData, setFormData] = useState({ imageUrl: "", note: "" });
 
-  const { data: updates, isFetching } = useGetGrowthUpdatesQuery(item._id, { skip: !expanded });
+  const { data: updates, isFetching, isError, error } = useGetGrowthUpdatesQuery(item._id, { skip: !expanded });
   const [markCompleted, { isLoading: isCompleting }] = useMarkCompletedMutation();
-  const [postGrowthUpdate, { isLoading: isPosting }] = usePostGrowthUpdateMutation();
 
   const handleComplete = async () => {
     if (!window.confirm("Mark this tree as completed?")) return;
     try {
       await markCompleted(item._id).unwrap();
-    } catch (error) {
+    } catch (err) {
       alert("Failed to update status.");
-    }
-  };
-
-  const handlePostUpdate = async () => {
-    if (!formData.imageUrl || !formData.note) {
-      alert("Please add both a photo URL and a note.");
-      return;
-    }
-    try {
-      await postGrowthUpdate({ sponsorshipId: item._id, ...formData }).unwrap();
-      setFormData({ imageUrl: "", note: "" });
-      setFormOpen(false);
-      setExpanded(true);
-    } catch (error) {
-      console.log(error)
-      alert("Failed to post update.");
     }
   };
 
@@ -64,15 +90,10 @@ const FarmerTreeCard = ({ item }) => {
           </div>
 
           {formOpen && (
-            <div className="border rounded p-2 mb-2">
-              <input type="url" placeholder="Photo URL" className="form-control form-control-sm mb-2"
-                value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} />
-              <textarea placeholder="How's the tree doing?" className="form-control form-control-sm mb-2" rows="2"
-                value={formData.note} onChange={(e) => setFormData({ ...formData, note: e.target.value })} />
-              <button onClick={handlePostUpdate} className="btn btn-success btn-sm w-100" disabled={isPosting}>
-                {isPosting ? "Posting..." : "Submit Update"}
-              </button>
-            </div>
+            <GrowthUpdateForm
+              sponsorshipId={item._id}
+              onDone={() => { setFormOpen(false); setExpanded(true); }}
+            />
           )}
 
           {expanded && (
@@ -81,6 +102,10 @@ const FarmerTreeCard = ({ item }) => {
                 <div className="d-flex justify-content-center py-2">
                   <div className="spinner-border spinner-border-sm text-success" role="status" />
                 </div>
+              ) : isError ? (
+                <p className="text-danger small mb-0">
+                  Could not load updates ({error?.status}): {error?.data?.message}
+                </p>
               ) : (
                 <GrowthTimeline updates={updates} />
               )}
