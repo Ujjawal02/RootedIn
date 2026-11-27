@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useParams, useNavigate} from 'react-router-dom'
 import {useGetTreeByIdQuery, useUpdateTreeMutation} from '../../features/tree/treeApi'
 import ImagePicker from '../../components/common/ImagePicker';
-
+import toast from 'react-hot-toast'
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
 
@@ -54,8 +54,11 @@ const UpdateTree = () => {
     }
 
     try {
-      await UpdateTree({id, ...formData}).unwrap();
+      await UpdateTree({id, formData: body}).unwrap();
+      toast.success("Update Tree Successfully!")
     } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!")
       // the `error` value from the hook drives the message below
     }
   }
