@@ -1,120 +1,306 @@
 
-.tree-loader {
+.rooted-loader {
   min-height: 100vh;
+  width: 100%;
+  background: #FAF7F2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #FAF7F2;
-  text-align: center;
   overflow: hidden;
-  padding: 20px;
+  position: relative;
+  font-family: inherit;
 }
 
-.tree-animation {
+/* Scene */
+
+.loader-scene {
+  width: 280px;
+  height: 250px;
   position: relative;
-  width: 150px;
-  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
-.tree-icon {
-  font-size: 85px;
-  transform-origin: bottom center;
-  animation: treeGrow 1.5s ease-out infinite alternate;
-  z-index: 2;
-}
+/* Sun */
 
-.tree-ground {
+.loader-sun {
   position: absolute;
-  bottom: 15px;
-  width: 85px;
-  height: 12px;
-  background: #D4A373;
+  width: 115px;
+  height: 115px;
   border-radius: 50%;
-  opacity: 0.7;
+  background: #E9CFA9;
+  opacity: .22;
+  top: 15px;
+  right: 40px;
+  animation: sunPulse 3s ease-in-out infinite;
 }
 
-.floating-leaf {
+.loader-sun span {
   position: absolute;
-  font-size: 23px;
+  inset: 13px;
+  border: 1px solid #D4A373;
+  border-radius: 50%;
+}
+
+/* Tree SVG */
+
+.growing-tree {
+  width: 240px;
+  height: 240px;
+  z-index: 2;
+  overflow: visible;
+}
+
+/* Stem growth */
+
+.tree-stem {
+  stroke-dasharray: 125;
+  stroke-dashoffset: 125;
+  animation: stemGrow 2s ease-out forwards;
+}
+
+/* Leaves */
+
+.leaf-left,
+.leaf-right,
+.leaf-top {
+  transform-box: fill-box;
+  transform-origin: center bottom;
   opacity: 0;
 }
 
-.leaf-one {
-  animation: leafFloat 2.5s ease-in-out infinite;
+.leaf-left {
+  animation: leafOpen .9s ease-out 1.2s forwards;
 }
 
-.leaf-two {
-  animation: leafFloat 2.5s ease-in-out infinite 1.2s;
+.leaf-right {
+  animation: leafOpen .9s ease-out 1.6s forwards;
 }
 
-@keyframes treeGrow {
+.leaf-top {
+  animation: leafOpen .9s ease-out 2s forwards;
+}
+
+/* Gentle leaf movement */
+
+.leaf-left,
+.leaf-right,
+.leaf-top {
+  animation-iteration-count: 1, infinite;
+  animation-duration: .9s, 3s;
+  animation-fill-mode: forwards, both;
+}
+
+.leaf-left {
+  animation-name: leafOpen, leafSway;
+  animation-delay: 1.2s, 2.2s;
+}
+
+.leaf-right {
+  animation-name: leafOpen, leafSway;
+  animation-delay: 1.6s, 2.5s;
+}
+
+.leaf-top {
+  animation-name: leafOpen, leafSway;
+  animation-delay: 2s, 2.8s;
+}
+
+@keyframes stemGrow {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes leafOpen {
   from {
-    transform: scale(0.75);
+    opacity: 0;
+    transform: scale(0) rotate(-25deg);
   }
   to {
-    transform: scale(1);
+    opacity: 1;
+    transform: scale(1) rotate(0);
   }
 }
 
-@keyframes leafFloat {
+@keyframes leafSway {
+  0%, 100% { rotate: 0deg; }
+  50% { rotate: 5deg; }
+}
+
+/* Roots */
+
+.tree-roots path {
+  stroke: #B87945;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: rootGrow 1.5s ease-out 1.5s forwards;
+}
+
+@keyframes rootGrow {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Seed */
+
+.tree-seed {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: seedPulse 2s ease-in-out infinite;
+}
+
+@keyframes seedPulse {
+  0%, 100% { opacity: .6; }
+  50% { opacity: 1; }
+}
+
+/* Ground */
+
+.ground-glow {
+  position: absolute;
+  width: 110px;
+  height: 25px;
+  bottom: 20px;
+  background: #40916C;
+  filter: blur(25px);
+  opacity: .18;
+}
+
+/* Floating particles */
+
+.particle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #52B788;
+  opacity: 0;
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+.particle-1 {
+  left: 35px;
+  top: 100px;
+}
+
+.particle-2 {
+  right: 30px;
+  top: 120px;
+  animation-delay: .7s;
+}
+
+.particle-3 {
+  left: 75px;
+  top: 35px;
+  animation-delay: 1.2s;
+}
+
+.particle-4 {
+  right: 65px;
+  top: 55px;
+  animation-delay: 1.8s;
+}
+
+@keyframes particleFloat {
   0% {
+    transform: translateY(20px) scale(.5);
     opacity: 0;
-    transform: translate(0, 20px) rotate(0deg);
   }
-  30% {
-    opacity: 1;
+  50% {
+    opacity: .8;
   }
   100% {
+    transform: translateY(-35px) scale(1.2);
     opacity: 0;
-    transform: translate(55px, -65px) rotate(90deg);
   }
 }
 
-.tree-loader h4 {
+@keyframes sunPulse {
+  0%, 100% { transform: scale(.95); }
+  50% { transform: scale(1.08); }
+}
+
+/* Text */
+
+.loader-content {
+  text-align: center;
+  margin-top: 8px;
+  z-index: 3;
+}
+
+.brand-name {
+  font-size: 32px;
+  font-weight: 800;
   color: #1B4332;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.tree-loader p {
-  color: #527565;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-
-.loader-track {
-  width: 180px;
-  height: 5px;
-  background: #DDE8DF;
-  border-radius: 20px;
-  overflow: hidden;
+  letter-spacing: -1.5px;
   margin-bottom: 15px;
 }
 
+.brand-name span {
+  color: #40916C;
+}
+
+.loader-content h2 {
+  font-size: 17px;
+  font-weight: 650;
+  color: #1B4332;
+  margin-bottom: 8px;
+}
+
+.loader-content p {
+  color: #718477;
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+
 .loader-progress {
-  height: 100%;
-  width: 40%;
-  background: #40916C;
+  width: 180px;
+  height: 4px;
   border-radius: 20px;
-  animation: loadingProgress 1.5s ease-in-out infinite;
+  background: #DCE8DE;
+  overflow: hidden;
+  margin: auto auto 17px;
 }
 
-@keyframes loadingProgress {
-  0% {
-    transform: translateX(-100%);
+.loader-progress div {
+  height: 100%;
+  width: 35%;
+  background: #40916C;
+  border-radius: inherit;
+  animation: progressMove 1.5s ease-in-out infinite;
+}
+
+@keyframes progressMove {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(290%); }
+}
+
+.loader-caption {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: #9BA99E;
+  font-weight: 700;
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+  .loader-scene {
+    transform: scale(.9);
   }
-  100% {
-    transform: translateX(250%);
+
+  .loader-content h2 {
+    font-size: 15px;
   }
 }
 
-.tree-loader small {
-  color: #8B9B8F;
-  font-size: 12px;
+@media (prefers-reduced-motion: reduce) {
+  .rooted-loader *,
+  .rooted-loader *::before,
+  .rooted-loader *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
-

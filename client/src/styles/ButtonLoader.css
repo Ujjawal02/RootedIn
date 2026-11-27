@@ -1,0 +1,66 @@
+
+.button-loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  white-space: nowrap;
+}
+
+.button-loader-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  animation: buttonPlantRotate 2.5s ease-in-out infinite;
+}
+
+.button-leaf {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+
+.button-leaf.left {
+  animation: buttonLeafMove 1.2s ease-in-out infinite alternate;
+}
+
+.button-leaf.right {
+  animation: buttonLeafMove 1.2s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes buttonPlantRotate {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes buttonLeafMove {
+  from {
+    transform: rotate(-8deg);
+  }
+  to {
+    transform: rotate(10deg);
+  }
+}
+
+/* For dark/green buttons */
+
+.button-loader.light {
+  color: #FFFFFF;
+}
+
+.button-loader.light .button-loader-icon {
+  color: #FFFFFF;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-loader *,
+  .button-loader *::before {
+    animation: none !important;
+  }
+}

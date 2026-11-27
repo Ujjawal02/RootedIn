@@ -3,6 +3,8 @@ import {
   useGetApprovedUnassignedQuery, useGetFarmersQuery, useAssignFarmerMutation,
 } from '../../features/admin/adminApi'
 import toast from 'react-hot-toast';
+import PageLoader from '../../components/common/loaders/PageLoader';
+import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
 const AssignedSponsorships = () => {
   const { data: requests, isLoading, isError } = useGetApprovedUnassignedQuery();
   const { data: farmers } = useGetFarmersQuery();
@@ -26,7 +28,12 @@ const AssignedSponsorships = () => {
   };
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="Growing your impact"
+        subMessage="Loading assigned sponsorships..."
+      />
+    );
   }
   if (isError) {
     return <p className="text-center text-danger py-5">Could not load approved requests.</p>;
@@ -66,7 +73,12 @@ const AssignedSponsorships = () => {
             </div>
             <div className="col-2 d-flex justify-content-end pe-3">
               <button onClick={() => handleAssign(req._id)} className="btn btn-success btn-sm" disabled={isAssigning}>
-                {isAssigning ? "Assigning..." : "Assign"}
+                {isAssigning ? 
+                 <ButtonLoader
+                  text="Assigning to Farmer..."
+                  light
+                />
+                : "Assign"}
               </button>
             </div>
           </div>

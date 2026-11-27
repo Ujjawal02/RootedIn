@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { useGetTreesQuery } from '../../features/tree/treeApi';
 import { selectCurrentUser } from '../../features/auth/authSlice';
 import CartButton from '../../components/cart/CartButton';
-
+import SkeletonLoader from '../../components/common/loaders/SkeletonLoader'
 const Home = () => {
   const { data: trees, isLoading, isError } = useGetTreesQuery();
   const user = useSelector(selectCurrentUser);
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+      return <SkeletonLoader type="tree-card" count={6} />;
   }
 
   if (isError) return <p className="text-center text-danger py-5">Failed to load trees.</p>;

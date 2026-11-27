@@ -6,9 +6,11 @@ import {selectCurrentUser} from '../../features/auth/authSlice'
 import CartButton from '../../components/cart/CartButton'
 import SponsorButton from '../../components/tree/SponsorButton'
 import toast from 'react-hot-toast';
+import PageLoader from '../../components/common/loaders/PageLoader'
+
 const ShowTree = () => {
   const {id} = useParams();
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const {data:tree, isLoading, isError} = useGetTreeByIdQuery(id);
   const [deleteTree, {isLoading: isDeleting}] = useDeleteTreeMutation(id);
@@ -20,15 +22,21 @@ const ShowTree = () => {
     try {
       await deleteTree(id).unwrap();
       toast.success("Tree deleted. You can restore it from Deleted Trees.");
-      Navigate('/');
+      navigate('/');
     } catch (error) {
       toast.error("Something went wrong deleting this tree.");
     }
   }
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="On the way to Know The Details..."
+        subMessage="Discovering greener possibilities..."
+      />
+    );
   }
+
   if (isError || !tree) {
     return <p className="text-center text-muted py-5">Tree not found.</p>;
   }

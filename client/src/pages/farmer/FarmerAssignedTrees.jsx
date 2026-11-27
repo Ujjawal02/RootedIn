@@ -6,6 +6,8 @@ import { useGetGrowthUpdatesQuery } from '../../features/sponsorship/sponsorship
 import GrowthTimeline from '../../components/tree/GrowthTimeline'
 import ImagePicker from '../../components/common/ImagePicker'
 import toast from 'react-hot-toast'
+import PageLoader from '../../components/common/loaders/PageLoader'
+
 const GrowthUpdateForm = ({ sponsorshipId, onDone }) => {
   const [note, setNote] = useState("");
   const [imageFile, setImageFile] = useState(null);
@@ -126,8 +128,14 @@ const FarmerAssignedTrees = () => {
   const { data: trees, isLoading, isError } = useGetMyAssignedTreesQuery();
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="Growing your impact"
+        subMessage="Loading assigned sponsorships..."
+      />
+    );
   }
+
   if (isError) {
     return <p className="text-center text-danger py-5">Could not load your assigned trees.</p>;
   }

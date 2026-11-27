@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCreateTreeMutation } from '../../features/tree/treeApi'
 import ImagePicker from '../../components/common/ImagePicker'
-
+import ButtonLoader from '../../components/common/Loaders/ButtonLoader'
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
 const NewTree = () => {
@@ -93,7 +93,12 @@ const NewTree = () => {
               <ImagePicker label="Tree image" required onChange={setImageFile}/>
 
               <button className="btn btn-success w-100" disabled={isLoading}>
-                {isLoading ? "Creating..." : "Add Tree"}
+                {isLoading ?
+                <ButtonLoader
+                  text="Creating New Tree..."
+                  light
+                />
+                : "Add Tree"}
               </button>
             </form>
           </div>

@@ -4,8 +4,11 @@ import {
   useDirectCheckoutQuery, useCartItemCheckoutQuery, useCartCheckoutQuery,
   useConfirmSponsorshipMutation,
 } from '../../features/sponsorship/sponsorshipApi'
-
+import PageLoader from '../../components/common/loaders/PageLoader';
 import toast from 'react-hot-toast';
+import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
+
+
 const Sponsor = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -58,7 +61,12 @@ const Sponsor = () => {
     return <p className="text-center text-danger py-5">Invalid checkout link.</p>;
   }
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="Loading Sponsorship page"
+        subMessage="Loading assigned sponsorships..."
+      />
+    );
   }
   if (isError || !checkout) {
     return <p className="text-center text-danger py-5">Could not load checkout details. Please try again.</p>;
@@ -86,7 +94,12 @@ const Sponsor = () => {
           </div>
 
           <button onClick={handleConfirm} className="btn btn-success w-100 mt-4" disabled={isConfirming}>
-            {isConfirming ? "Confirming..." : "Confirm Sponsorship"}
+            {isConfirming ? 
+            <ButtonLoader
+              text="Posting Update..."
+              light
+            />
+            : "Confirm Sponsorship"}
           </button>
         </div>
       </div>

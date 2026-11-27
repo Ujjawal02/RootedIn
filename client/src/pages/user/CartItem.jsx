@@ -6,7 +6,7 @@ import {
   useDecreaseQuantityMutation,
   useRemoveFromCartMutation,
 } from "../../features/cart/cartApi";
-
+import PageLoader from "../../components/common/loaders/PageLoader";
 const CartItem = () => {
   const navigate = useNavigate();
   const { data: cartItems, isLoading, isError } = useGetCartQuery();
@@ -17,12 +17,13 @@ const CartItem = () => {
   const isBusy = isIncreasing || isDecreasing;
 
   if (isLoading) {
-    return (
-      <div className="d-flex justify-content-center py-5">
-        <div className="spinner-border text-success" role="status" />
-      </div>
-    );
-  }
+  return (
+    <PageLoader
+      message="Finding your cart items..."
+      subMessage="Discovering greener possibilities..."
+    />
+  );
+}
 
   if (isError) {
     return <p className="text-center text-danger py-5">Could not load your cart.</p>;

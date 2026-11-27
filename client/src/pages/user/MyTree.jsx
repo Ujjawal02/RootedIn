@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useGetMyTreeQuery } from '../../features/myTree/myTreeApi'
 import { useGetGrowthUpdatesQuery } from '../../features/sponsorship/sponsorshipApi'
 import GrowthTimeline from '../../components/tree/GrowthTimeline'
-
+import PageLoader from '../../components/common/loaders/PageLoader'
 const STATUS_STYLES = {
   pending: "bg-secondary",
   approved: "bg-info",
@@ -71,7 +71,12 @@ const MyTree = () => {
   const { data: myTree, isLoading, isError } = useGetMyTreeQuery();
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="Finding your Tree's"
+        subMessage="Discovering greener possibilities..."
+      />
+    );
   }
   if (isError) {
     return <p className="text-center text-danger py-5">Could not load your sponsored trees.</p>;

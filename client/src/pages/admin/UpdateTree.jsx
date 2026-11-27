@@ -3,6 +3,8 @@ import {useParams, useNavigate} from 'react-router-dom'
 import {useGetTreeByIdQuery, useUpdateTreeMutation} from '../../features/tree/treeApi'
 import ImagePicker from '../../components/common/ImagePicker';
 import toast from 'react-hot-toast'
+import PageLoader from '../../components/common/loaders/PageLoader';
+import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
 
@@ -63,11 +65,12 @@ const UpdateTree = () => {
     }
   }
 
-  if (isFetching) {
+    if (isFetching) {
     return (
-      <div className="d-flex justify-content-center py-5">
-        <div className="spinner-border text-success" role="status" />
-      </div>
+      <PageLoader
+        message="Updating The Details..."
+        subMessage="Loading assigned sponsorships..."
+      />
     );
   }
 
@@ -136,7 +139,10 @@ const UpdateTree = () => {
                       
                      <div className="d-flex gap-2">
                         <button type="submit" className="btn btn-success flex-grow-1" disabled={isSaving}>
-                          {isSaving ? "Saving..." : "Save Changes"}
+                          {isSaving ? <ButtonLoader
+                              text="Saving Update's..."
+                              light
+                            /> : "Save Changes"}
                         </button>
                         <button type="button" className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
                           Cancel

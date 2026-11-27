@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useGetMeQuery } from './features/auth/authApi';
 import { selectAuthChecked } from './features/auth/authSlice';
 import AppRoutes from './routes/AppRoutes';
-import TreeLoader from './components/common/TreeLoader';
-
+import TreeLoader from './components/common/loaders/TreeLoader';
+import PageLoader from './components/common/loaders/PageLoader';
 const App = () => {
 
   useGetMeQuery();
@@ -13,6 +13,7 @@ const App = () => {
   if(!authChecked){
     return <TreeLoader />;  
   }
+  // return <TreeLoader />;  
   return <AppRoutes/>
 }
 

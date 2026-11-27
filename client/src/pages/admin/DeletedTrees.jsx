@@ -1,12 +1,18 @@
 import React from 'react'
 import { useGetDeletedTreesQuery, useRestoreTreeMutation } from '../../features/admin/adminApi'
-
+import PageLoader from '../../components/common/loaders/PageLoader';
+import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
 const DeletedTrees = () => {
   const { data: trees, isLoading, isError } = useGetDeletedTreesQuery();
   const [restoreTree, { isLoading: isRestoring }] = useRestoreTreeMutation();
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center py-5"><div className="spinner-border text-success" role="status" /></div>;
+    return (
+      <PageLoader
+        message="Soft Deteting..."
+        subMessage="Loading assigned sponsorships..."
+      />
+    );
   }
   if (isError) {
     return <p className="text-center text-danger py-5">Could not load deleted trees.</p>;
@@ -29,7 +35,13 @@ const DeletedTrees = () => {
                 <p className="text-muted mb-1">{tree.species}</p>
                 <p className="mb-3">₹{tree.price}</p>
                 <button onClick={() => restoreTree(tree._id)} className="btn btn-outline-success mt-auto" disabled={isRestoring}>
-                  {isRestoring ? "Restoring..." : "Restore Tree"}
+                  {isRestoring ? 
+                    <ButtonLoader
+                      text="Restoring Tree..."
+                      light
+                    />
+
+                  : "Restore Tree"}
                 </button>
               </div>
             </div>

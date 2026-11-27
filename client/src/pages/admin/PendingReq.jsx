@@ -1,17 +1,18 @@
 import React from 'react'
 import { useApproveRequestMutation, useGetPendingRequestsQuery, useRejectRequestMutation } from '../../features/admin/adminApi'
-
+import PageLoader from '../../components/common/loaders/PageLoader';
 const PendingReq = () => {
   const {data: requests, isLoading, isError} = useGetPendingRequestsQuery();
   const [approveRequest, {isLoading: isApproving}] = useApproveRequestMutation();
   const [rejectRequest, {isLoading: isRejecting}] = useRejectRequestMutation();
 
-  if(isLoading){
+  if (isLoading) {
     return (
-    <div className='d-flex justify-content-center py-5'>
-      <div className='spinner-border text-success' role="status"/>
-    </div>
-    )
+      <PageLoader
+        message="Finding All Pending Tree's"
+        subMessage="Loading assigned sponsorships..."
+      />
+    );
   }
   
   if (isError) {
