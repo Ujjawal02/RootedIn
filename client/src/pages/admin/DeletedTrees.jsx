@@ -1,7 +1,7 @@
 import React from 'react'
 import { useGetDeletedTreesQuery, useRestoreTreeMutation } from '../../features/admin/adminApi'
 import PageLoader from '../../components/common/loaders/PageLoader';
-import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
+import ButtonLoader from '../../components/common/loaders/ButtonLoader';
 const DeletedTrees = () => {
   const { data: trees, isLoading, isError } = useGetDeletedTreesQuery();
   const [restoreTree, { isLoading: isRestoring }] = useRestoreTreeMutation();

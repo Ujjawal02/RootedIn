@@ -6,7 +6,7 @@ import {
 } from '../../features/sponsorship/sponsorshipApi'
 import PageLoader from '../../components/common/loaders/PageLoader';
 import toast from 'react-hot-toast';
-import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
+import ButtonLoader from '../../components/common/loaders/ButtonLoader';
 
 
 const Sponsor = () => {

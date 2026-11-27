@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCreateTreeMutation } from '../../features/tree/treeApi'
 import ImagePicker from '../../components/common/ImagePicker'
-import ButtonLoader from '../../components/common/Loaders/ButtonLoader'
+import ButtonLoader from '../../components/common/loaders/ButtonLoader'
 const CATEGORIES = ["Fruit", "Medicinal", "Timber", "Shade", "Flowering"];
 
 const NewTree = () => {

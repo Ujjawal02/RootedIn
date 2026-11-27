@@ -4,7 +4,7 @@ import {
 } from '../../features/admin/adminApi'
 import toast from 'react-hot-toast';
 import PageLoader from '../../components/common/loaders/PageLoader';
-import ButtonLoader from '../../components/common/Loaders/ButtonLoader';
+import ButtonLoader from '../../components/common/loaders/ButtonLoader';
 const AssignedSponsorships = () => {
   const { data: requests, isLoading, isError } = useGetApprovedUnassignedQuery();
   const { data: farmers } = useGetFarmersQuery();
