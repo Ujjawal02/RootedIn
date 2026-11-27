@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAddToCartMutation } from '../../features/cart/cartApi';
-import ButtonLoader from '../common/Loaders/ButtonLoader';
+import ButtonLoader from '../common/loaders/ButtonLoader';
 const CartButton = ({treeId}) => {
   const navigate = useNavigate();
   const [addToCart, {isLoading}] = useAddToCartMutation();
