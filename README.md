@@ -98,5 +98,25 @@ server/tests    integration tests
 
 ## Screenshots
 
+### Home Page
+![Home page](docs/screenshots/home.png)
+
+### Cart
+![Cart](docs/screenshots/cart.png)
+
+### My Tree
+![My Tree](docs/screenshots/my-tree.png)
+
+### Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin-pending.png)
+
+### Farmer Dashboard
+![Farmer Dashboard](docs/screenshots/farmer-dashboard.png)
+
 ## Roadmap
-Farmer verification, Google login, occasion sponsorships, notifications, online payments.
+
+- Farmer verification
+- Google login
+- Occasion sponsorships
+- Notifications
+- Online payments
