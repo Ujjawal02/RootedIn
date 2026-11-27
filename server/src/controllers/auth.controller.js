@@ -5,10 +5,15 @@ const generateToken = (userId) => {
     return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-const cookieOptions = {
+const isProduction = process.env.NODE_ENV === "production";
+const baseCookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+}
+
+const cookieOptions = {
+    ...baseCookieOptions,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -68,7 +73,7 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.logout = async (req, res) => {
-    res.clearCookie("token", cookieOptions);
+    res.clearCookie("token", baseCookieOptions);
     return res.status(200).json({ success: true, message: "Logged out" });
 };
 
