@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "jest"
+    "test": "jest",
+    "create-account": "node scripts/createAccount.js"
   },
   "keywords": [],
   "author": "",
